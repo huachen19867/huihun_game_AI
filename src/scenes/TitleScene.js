@@ -1,4 +1,6 @@
 import { SoundManager } from '../systems/SoundManager.js';
+import { createDefaultGameState } from '../systems/StoryState.js';
+import { resolveStartRoute } from '../systems/StartRoute.js';
 
 export class TitleScene extends Phaser.Scene {
     constructor() {
@@ -9,20 +11,7 @@ export class TitleScene extends Phaser.Scene {
         this.cameras.main.setBackgroundColor('#000000');
 
         // Reset Global Game State COMPLETELY
-        window.globalGameState = {
-            storyStep: 0,
-            hasMatches: false,
-            hasRice: false,
-            hasRedKey: false, // Ensure this is reset
-            candlesLit: 0,
-            inventory: [],
-            viewedPhotos: [],
-            clues: [],
-            corridorSolved: false,
-            viewedIntro: false,
-            isHidden: false,
-            isChasing: false
-        };
+        window.globalGameState = createDefaultGameState();
 
         // Clear Inventory UI
         const invSlots = document.getElementById('inv-slots');
@@ -35,7 +24,7 @@ export class TitleScene extends Phaser.Scene {
         document.getElementById('joystick-zone').style.display = 'none';
         document.getElementById('action-btn').style.display = 'none';
         window.dialogActive = false;
-        
+
         // Init Sound
         this.input.keyboard.once('keydown', () => {
             if (!this.game.soundManager) {
@@ -48,6 +37,12 @@ export class TitleScene extends Phaser.Scene {
             fontSize: '80px',
             color: '#8b0000',
             fontStyle: 'bold'
+        }).setOrigin(0.5);
+
+        const authorText = this.add.text(400, 280, '作者WeChat：baidai_baidai', {
+            fontFamily: '"SimSun", serif',
+            fontSize: '24px',
+            color: '#aaaaaa'
         }).setOrigin(0.5);
 
         this.tweens.add({
@@ -86,7 +81,8 @@ export class TitleScene extends Phaser.Scene {
             this.game.soundManager.playTone(100, 'sawtooth', 2);
             this.cameras.main.fadeOut(1000, 0, 0, 0);
             this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
-                this.scene.start('IntroScene');
+                const route = resolveStartRoute(window.location.search);
+                this.scene.start(route.scene, route.data);
             });
         };
 

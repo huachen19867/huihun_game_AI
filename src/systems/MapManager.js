@@ -18,7 +18,8 @@ export class MapManager {
         }
 
         const mapData = mapDef.data;
-        
+        const visual = mapDef.visual || {};
+
         // Set World Bounds
         const mapWidth = mapDef.width * 32;
         const mapHeight = mapDef.height * 32;
@@ -26,10 +27,14 @@ export class MapManager {
         this.scene.cameras.main.setBounds(0, 0, mapWidth, mapHeight);
 
         // Memory Room Special Settings
-        if (mapId === 'room_memory') {
-            this.scene.lights.enable().setAmbientColor(0xffffff); // Full bright
+        // On mobile, use simple lighting for ALL maps to improve performance
+        if (mapId === 'room_memory' || this.scene.isMobile) {
+            this.scene.lights.enable().setAmbientColor(0xffffff); // Full bright / No dynamic lights
+        } else if (visual.ambient !== undefined) {
+            this.scene.lights.enable();
+            this.scene.lights.setAmbientColor(visual.ambient);
         } else {
-            // Standard Horror Settings
+            // Standard Horror Settings (PC Only)
             this.scene.lights.enable();
             this.scene.lights.setAmbientColor(0x666666);
         }
@@ -39,12 +44,12 @@ export class MapManager {
         if (!this.scene.walls) this.scene.walls = this.scene.physics.add.staticGroup();
         if (!this.scene.doors) this.scene.doors = this.scene.add.group();
         if (!this.scene.photos) this.scene.photos = this.scene.physics.add.staticGroup();
-        
+
         // Internal reference for convenience
         this.walls = this.scene.walls;
         this.doors = this.scene.doors;
         this.photos = this.scene.photos;
-        
+
         // New group for furniture to simplify collision
         this.furniture = this.scene.physics.add.staticGroup();
         this.scene.furniture = this.furniture;
@@ -58,31 +63,35 @@ export class MapManager {
                 // Determine textures based on map type
                 let floorTex = 'tile_floor';
                 let wallTex = 'tile_wall';
-                
+
                 if (mapId === 'room_entrance' || mapId === 'room_backyard' || mapId === 'room_prologue') {
                     floorTex = 'tile_mud';
                     wallTex = 'tile_hedge';
                 }
 
                 const tile = this.scene.add.image(x * 32 + 16, y * 32 + 16, floorTex);
-                
-                if (mapId !== 'room_memory') {
+                if (visual.floorTint !== undefined) tile.setTint(visual.floorTint);
+
+                // Only apply Light2D pipeline on PC and non-memory maps
+                if (mapId !== 'room_memory' && !this.scene.isMobile) {
                     tile.setPipeline('Light2D');
                 }
-                
+
                 this.floorLayer.push(tile);
 
                 if (mapData[y][x] === 1) {
                     const wall = this.walls.create(x * 32 + 16, y * 32 + 16, wallTex);
-                    if (mapId !== 'room_memory') {
+                    if (visual.wallTint !== undefined) wall.setTint(visual.wallTint);
+                    if (mapId !== 'room_memory' && !this.scene.isMobile) {
                         wall.setPipeline('Light2D');
                     }
                 } else {
                     // Random clutter on floor (5% chance)
-                    if (Math.random() < 0.05 && mapId !== 'room_backyard' && mapId !== 'room_entrance' && mapId !== 'room_memory') {
+                    if (visual.debris !== false && Math.random() < 0.05 && mapId !== 'room_backyard' && mapId !== 'room_entrance' && mapId !== 'room_memory') {
                         const debris = this.scene.add.image(x * 32 + 16 + Phaser.Math.Between(-8, 8), y * 32 + 16 + Phaser.Math.Between(-8, 8), 'trash_paper');
                         debris.setRotation(Phaser.Math.FloatBetween(0, 6.28));
                         debris.setAlpha(0.7);
+                        if (visual.paperTint !== undefined) debris.setTint(visual.paperTint);
                         debris.setPipeline('Light2D');
                         this.floorLayer.push(debris);
                     }
@@ -99,7 +108,7 @@ export class MapManager {
 
         // Helper to add to interactables
         const addToInteractables = (obj, data) => {
-            if (data && (data.dialog || data.id)) { 
+            if (data && (data.dialog || data.id)) {
                 this.scene.interactables.add(obj);
                 if (data.dialog) obj.dialog = data.dialog;
                 if (data.id) obj.objId = data.id;
@@ -127,27 +136,32 @@ export class MapManager {
                 this.scene.interactables.add(photo);
             });
         }
-        
+
         if (objs.coffin) {
             scene.coffin = this.furniture.create(objs.coffin.x, objs.coffin.y, 'coffin');
             if (isHorror) scene.coffin.setPipeline('Light2D');
             setupFurniture(scene.coffin);
+            // Explicitly set immovable and refresh
+            if (scene.coffin.body) {
+                scene.coffin.body.immovable = true;
+                scene.coffin.refreshBody();
+            }
             addToInteractables(scene.coffin, objs.coffin);
         }
-        
+
         if (objs.altar) {
             scene.altar = this.furniture.create(objs.altar.x, objs.altar.y, 'altar');
             if (isHorror) scene.altar.setPipeline('Light2D');
             setupFurniture(scene.altar);
             addToInteractables(scene.altar, objs.altar);
-            
+
             scene.leftCandle = scene.add.sprite(objs.altar.x - 30, objs.altar.y - 10, 'candle').setAlpha(0.3);
             scene.rightCandle = scene.add.sprite(objs.altar.x + 30, objs.altar.y - 10, 'candle').setAlpha(0.3);
             if (isHorror) {
                 scene.leftCandle.setPipeline('Light2D');
                 scene.rightCandle.setPipeline('Light2D');
             }
-            
+
             if (scene.gameState.candlesLit) {
                  scene.leftCandle.setAlpha(1);
                  scene.rightCandle.setAlpha(1);
@@ -168,7 +182,7 @@ export class MapManager {
              scene.dirtPile.setScale(0.8);
              if (isHorror) scene.dirtPile.setPipeline('Light2D');
              addToInteractables(scene.dirtPile, { ...objs.dirt, dialog: '奇怪的土堆' });
-             
+
              scene.add.particles(objs.dirt.x, objs.dirt.y, 'rain', {
                  speed: 10,
                  scale: { start: 0.5, end: 0 },
@@ -182,13 +196,13 @@ export class MapManager {
 
         if (objs.npc) {
             scene.npc = this.furniture.create(objs.npc.x, objs.npc.y, 'npc_paper');
-            if (isHorror) scene.npc.setPipeline('Light2D');
-            
+            if (isHorror && !scene.isMobile) scene.npc.setPipeline('Light2D');
+
             // Interaction setup
             scene.npc.objId = 'kitchen_ghost';
             scene.npc.refreshBody(); // Ensure body is active
 
-            
+
             if (scene.gameState.hasRice && scene.gameState.hasMatches) {
                  scene.npc.setVisible(false);
                  scene.npc.body.enable = false;
@@ -199,7 +213,7 @@ export class MapManager {
 
         if (objs.well) {
             scene.well = this.furniture.create(objs.well.x, objs.well.y, 'well');
-            if (isHorror) scene.well.setPipeline('Light2D');
+            if (isHorror && !scene.isMobile) scene.well.setPipeline('Light2D');
             addToInteractables(scene.well, objs.well);
         }
 
@@ -207,22 +221,22 @@ export class MapManager {
             scene.trees = scene.physics.add.staticGroup();
             objs.trees.forEach(treeData => {
                 const tree = scene.trees.create(treeData.x, treeData.y, 'tree');
-                if (isHorror) tree.setPipeline('Light2D');
+                if (isHorror && !scene.isMobile) tree.setPipeline('Light2D');
             });
         }
 
         if (objs.chest) {
              scene.chest = this.furniture.create(objs.chest.x, objs.chest.y, 'cabinet');
-             if (isHorror) scene.chest.setPipeline('Light2D');
+             if (isHorror && !scene.isMobile) scene.chest.setPipeline('Light2D');
              scene.chest.setTint(0xffd700); // Gold tint
-             scene.chest.setAlpha(0.01); 
+             scene.chest.setAlpha(0.01);
              setupFurniture(scene.chest);
              addToInteractables(scene.chest, objs.chest);
         }
 
         if (objs.car) {
              scene.car = this.furniture.create(objs.car.x, objs.car.y, 'car');
-             if (isHorror) scene.car.setPipeline('Light2D');
+             if (isHorror && !scene.isMobile) scene.car.setPipeline('Light2D');
              scene.car.body.setSize(60, 100);
              scene.car.body.setOffset(2, 14);
              // No setupFurniture here as it has custom bounds already
@@ -231,7 +245,7 @@ export class MapManager {
 
         if (objs.cabinet) {
             scene.cabinet = this.furniture.create(objs.cabinet.x, objs.cabinet.y, 'cabinet');
-            if (isHorror) scene.cabinet.setPipeline('Light2D');
+            if (isHorror && !scene.isMobile) scene.cabinet.setPipeline('Light2D');
             if (objs.cabinet.id === 'parents_cabinet' && scene.gameState.cabinetMoved) {
                 scene.cabinet.x -= 32;
             }
@@ -241,50 +255,50 @@ export class MapManager {
 
         if (objs.bed) {
             scene.bed = this.furniture.create(objs.bed.x, objs.bed.y, 'bed');
-            if (isHorror) scene.bed.setPipeline('Light2D');
+            if (isHorror && !scene.isMobile) scene.bed.setPipeline('Light2D');
             setupFurniture(scene.bed);
             addToInteractables(scene.bed, objs.bed);
         }
 
         if (objs.desk) {
             scene.desk = this.furniture.create(objs.desk.x, objs.desk.y, 'desk');
-            if (isHorror) scene.desk.setPipeline('Light2D');
+            if (isHorror && !scene.isMobile) scene.desk.setPipeline('Light2D');
             setupFurniture(scene.desk);
             addToInteractables(scene.desk, objs.desk);
         }
-        
+
         if (objs.diary) {
              scene.diary = this.furniture.create(objs.diary.x, objs.diary.y, 'diary');
-             if (isHorror) scene.diary.setPipeline('Light2D');
+             if (isHorror && !scene.isMobile) scene.diary.setPipeline('Light2D');
              addToInteractables(scene.diary, objs.diary);
         }
 
         if (objs.sink) {
              scene.sink = this.furniture.create(objs.sink.x, objs.sink.y, 'kitchen_sink');
-             if (isHorror) scene.sink.setPipeline('Light2D');
+             if (isHorror && !scene.isMobile) scene.sink.setPipeline('Light2D');
              addToInteractables(scene.sink, objs.sink);
         }
 
         if (objs.mirror) {
              scene.mirror = scene.add.rectangle(objs.mirror.x, objs.mirror.y, 40, 10, 0xaaaaaa, 0.5);
-             if (isHorror) scene.mirror.setPipeline('Light2D');
+             if (isHorror && !scene.isMobile) scene.mirror.setPipeline('Light2D');
              scene.physics.add.existing(scene.mirror, true);
              addToInteractables(scene.mirror, objs.mirror);
         }
 
         if (objs.toilet) {
              scene.toilet = this.furniture.create(objs.toilet.x, objs.toilet.y, 'toilet');
-             if (isHorror) scene.toilet.setPipeline('Light2D');
+             if (isHorror && !scene.isMobile) scene.toilet.setPipeline('Light2D');
              addToInteractables(scene.toilet, objs.toilet);
         }
-        
+
         if (objs.crashed_car) {
              scene.crashed_car = this.furniture.create(objs.crashed_car.x, objs.crashed_car.y, 'car');
-             if (isHorror) scene.crashed_car.setPipeline('Light2D');
-             scene.crashed_car.setRotation(0.2); 
-             scene.crashed_car.setTint(0x555555); 
+             if (isHorror && !scene.isMobile) scene.crashed_car.setPipeline('Light2D');
+             scene.crashed_car.setRotation(0.2);
+             scene.crashed_car.setTint(0x555555);
              addToInteractables(scene.crashed_car, objs.crashed_car);
-             
+
              scene.add.particles(objs.crashed_car.x, objs.crashed_car.y - 20, 'rain', {
                 speed: { min: 10, max: 30 },
                 scale: { start: 0.5, end: 1 },
@@ -300,20 +314,35 @@ export class MapManager {
             scene.medical_record = this.scene.add.image(objs.medical_record.x, objs.medical_record.y, 'trash_paper');
             if (isHorror) scene.medical_record.setPipeline('Light2D');
             scene.medical_record.setTint(0xffaaaa);
+            scene.medical_record.objId = 'medical_record';
+            this.scene.interactables.add(scene.medical_record);
             addToInteractables(scene.medical_record, objs.medical_record);
         }
 
         if (objs.family_rules) {
-            scene.family_rules = this.scene.add.image(objs.family_rules.x, objs.family_rules.y, 'photo_frame');
-            if (isHorror) scene.family_rules.setPipeline('Light2D');
+            // Change to physics object (furniture) for collision
+            scene.family_rules = this.furniture.create(objs.family_rules.x, objs.family_rules.y, 'photo_frame');
+            if (isHorror && !scene.isMobile) scene.family_rules.setPipeline('Light2D');
             scene.family_rules.setTint(0xffaaaa);
+
+            // Setup physics body
+            if (scene.family_rules.body) {
+                scene.family_rules.body.immovable = true;
+                // Make it a thin strip at the top wall
+                scene.family_rules.body.setSize(32, 10);
+                scene.family_rules.body.setOffset(0, 20);
+                scene.family_rules.refreshBody();
+            }
+
+            // Force add to interactables since it has no dialog/id in map data
+            this.scene.interactables.add(scene.family_rules);
             addToInteractables(scene.family_rules, objs.family_rules);
         }
 
         if (objs.safe) {
             scene.safe = this.furniture.create(objs.safe.x, objs.safe.y, 'safe');
             if (isHorror) scene.safe.setPipeline('Light2D');
-            
+
             // Explicitly ensure physics body is active and immovable
             if (scene.safe.body) {
                 scene.safe.body.enable = true;
@@ -326,7 +355,7 @@ export class MapManager {
                 scene.safe.body.setOffset(w * 0.05, h * 0.5);
                 scene.safe.refreshBody(); // Important for Static Bodies!
             }
-            
+
             // Force add to interactables (even if no dialog/id in map data)
             this.scene.interactables.add(scene.safe);
             addToInteractables(scene.safe, objs.safe);
@@ -336,6 +365,8 @@ export class MapManager {
             scene.wet_paper = this.scene.add.image(objs.wet_paper.x, objs.wet_paper.y, 'trash_paper');
             if (isHorror) scene.wet_paper.setPipeline('Light2D');
             scene.wet_paper.setTint(0x00aaff);
+            scene.wet_paper.objId = 'wet_paper';
+            this.scene.interactables.add(scene.wet_paper);
             addToInteractables(scene.wet_paper, objs.wet_paper);
         }
 
@@ -344,7 +375,7 @@ export class MapManager {
             if (isHorror) scene.incense.setPipeline('Light2D');
             scene.incense.setTint(0x884400);
             addToInteractables(scene.incense, objs.incense);
-            
+
             scene.add.particles(objs.incense.x, objs.incense.y, 'rain', {
                 speed: { min: 10, max: 20 },
                 scale: { start: 0.3, end: 0 },
@@ -403,7 +434,7 @@ export class MapManager {
         }
 
         if (objs.notes) {
-            // Notes are static group but should not collide? 
+            // Notes are static group but should not collide?
             // Actually let's use images for notes on floor
             objs.notes.forEach(noteData => {
                 const note = this.scene.add.image(noteData.x, noteData.y, 'trash_paper');
@@ -419,6 +450,8 @@ export class MapManager {
         if (objs.locked_window) {
             scene.locked_window = scene.add.rectangle(objs.locked_window.x, objs.locked_window.y, 40, 40, 0x0000ff, 0);
             scene.physics.add.existing(scene.locked_window, true);
+            scene.locked_window.objId = 'locked_window';
+            this.scene.interactables.add(scene.locked_window);
             addToInteractables(scene.locked_window, objs.locked_window);
         }
 
@@ -426,6 +459,38 @@ export class MapManager {
             scene.exit_door = scene.add.rectangle(objs.exit_door.x, objs.exit_door.y, 64, 32, 0xff0000, 0);
             scene.physics.add.existing(scene.exit_door, true);
             addToInteractables(scene.exit_door, objs.exit_door);
+        }
+
+        if (objs.interactables) {
+            objs.interactables.forEach(data => {
+                const texture = data.texture || 'trash_paper';
+                const item = scene.add.image(data.x, data.y, texture);
+                if (data.tint !== undefined) item.setTint(data.tint);
+                if (data.alpha !== undefined) item.setAlpha(data.alpha);
+                if (data.scale !== undefined) item.setScale(data.scale);
+                if (isHorror && !scene.isMobile) item.setPipeline('Light2D');
+
+                scene.physics.add.existing(item, true);
+                if (typeof item.refreshBody === 'function') {
+                    item.refreshBody();
+                } else if (item.body && typeof item.body.updateFromGameObject === 'function') {
+                    item.body.updateFromGameObject();
+                }
+
+                item.objId = data.id;
+                item.dialog = data.dialog;
+                item.documentTitle = data.documentTitle;
+                item.documentText = data.documentText;
+                item.clueId = data.clueId;
+                item.clueType = data.clueType;
+                item.memoryTrigger = data.memoryTrigger;
+                item.memoryReturn = data.memoryReturn;
+                item.memoryComplete = data.memoryComplete;
+                item.endingChoice = data.endingChoice;
+                item.endingWeight = data.endingWeight;
+                item.interactLabel = data.interactLabel;
+                scene.interactables.add(item);
+            });
         }
 
         if (objs.doors) {
@@ -437,7 +502,7 @@ export class MapManager {
 
                 const door = scene.add.rectangle(cx, cy, w + 16, h + 16, 0x00ff00, 0);
                 scene.physics.add.existing(door, true);
-                
+
                 // Visual Indicator for Attic Door (since it's just a wall otherwise)
                 if (doorData.targetMap === 'room_attic') {
                     const visual = scene.add.rectangle(cx, cy, w, h, 0x000000, 0.8);
@@ -463,14 +528,14 @@ export class MapManager {
                 }
                 door.key = doorData.key;
                 door.isLoop = doorData.isLoop;
-                
+
                 // Handle hidden doors
                 if (doorData.hidden) {
                     // Check if it should be revealed based on game state
                     if (door.targetMap === 'room_secret' && scene.gameState.cabinetMoved) {
                         door.visible = true;
                         door.body.enable = true;
-                        
+
                         // Add visual "hole"
                         const hole = scene.add.rectangle(cx, cy, w, h, 0x000000);
                         hole.setDepth(door.depth - 1); // Behind door debug

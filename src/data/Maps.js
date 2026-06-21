@@ -57,7 +57,7 @@ export const Maps = {
             car: { x: 250, y: 300 },
             exit_door: { x: 384, y: 416, dialog: '朱红色的大门漆皮剥落，露出了里面发黑的木头，像是一块块尸斑。推开门，生锈的门轴发出令人牙酸的“吱呀”声。' },
             doors: [
-                { x: 11, y: 0, w: 2, h: 1, targetMap: 'room_main', targetX: 368, targetY: 330 } 
+                { x: 11, y: 0, w: 2, h: 1, targetMap: 'room_main', targetX: 368, targetY: 330 }
             ]
         }
     },
@@ -76,7 +76,7 @@ export const Maps = {
             [1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1],
             [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
             [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], 
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
             [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
             [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
             [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
@@ -96,7 +96,6 @@ export const Maps = {
             dirt: { x: 650, y: 400 },
             stove: { x: 100, y: 400 },
             medical_record: { x: 200, y: 300 },
-            npc: { x: 700, y: 100 },
             doors: [
                 { x: 11, y: 0, w: 2, h: 1, targetMap: 'room_corridor', targetX: 240, targetY: 580 },
                 { x: 11, y: 15, w: 2, h: 1, targetMap: 'room_entrance', targetX: 368, targetY: 64 },
@@ -148,23 +147,23 @@ export const Maps = {
             [1,0,0,0,0,0,0,0,0,1],
             [1,0,0,0,0,0,0,0,0,1],
             [0,0,0,0,0,0,0,0,0,1],
-            [0,0,0,0,0,0,0,0,0,1], 
+            [0,0,0,0,0,0,0,0,0,1],
             [1,0,0,0,0,0,0,0,0,0],
             [1,0,0,0,0,0,0,0,0,0],
             [1,0,0,0,0,0,0,0,0,1],
             [1,0,0,0,0,0,0,0,0,0],
             [1,0,0,0,0,0,0,0,0,0],
             [1,0,0,0,0,0,0,0,0,1],
+            [0,0,0,0,0,0,0,0,0,1],
+            [0,0,0,0,0,0,0,0,0,1],
             [1,0,0,0,0,0,0,0,0,1],
-            [1,0,0,0,0,0,0,0,0,1],
-            [1,0,0,0,0,0,0,0,0,1],
-            [1,0,0,0,0,0,0,0,0,1],
-            [1,0,0,0,0,0,0,0,0,1],
+            [0,0,0,0,0,0,0,0,0,1],
+            [0,0,0,0,0,0,0,0,0,1],
             [1,1,1,1,1,0,0,1,1,1],
         ],
         objects: {
-            playerStart: { x: 176, y: 580 }, 
-            locked_window: { x: 48, y: 100 }, 
+            playerStart: { x: 176, y: 580 },
+            locked_window: { x: 48, y: 100 },
             photos: [
                 { x: 48, y: 150, id: 1, text: '1998年，全家福。那时候父母笑得很开心，我被抱在怀里。照片的边缘有些发黄，幸福得像个假象。' },
                 { x: 272, y: 250, id: 2, text: '1999年，满月。我抓周抓了一支笔，父亲很高兴，说我以后一定有出息。母亲在旁边看着，眼神里却透着一丝忧虑。' },
@@ -172,11 +171,13 @@ export const Maps = {
                 { x: 272, y: 450, id: 4, text: '2005年，争吵。照片被撕碎过又粘了起来。画面里只有父亲愤怒的背影和母亲掩面哭泣的样子。' }
             ],
             doors: [
-                { x: 5, y: 0, w: 2, h: 1, targetMap: 'room_backyard', targetX: 320, targetY: 100 }, 
+                { x: 5, y: 0, w: 2, h: 1, targetMap: 'room_backyard', targetX: 320, targetY: 100 },
                 { x: 9, y: 2, w: 1, h: 2, targetMap: 'room_attic', targetX: 320, targetY: 384 },
                 { x: 0, y: 6, w: 1, h: 2, targetMap: 'room_bathroom', targetX: 448, targetY: 208 },
                 { x: 9, y: 8, w: 1, h: 2, targetMap: 'room_bedroom_parents', targetX: 64, targetY: 240 },
                 { x: 9, y: 11, w: 1, h: 2, targetMap: 'room_bedroom_me', targetX: 64, targetY: 240 },
+                { x: 0, y: 14, w: 1, h: 2, targetMap: 'room_study', targetX: 448, targetY: 208 },
+                { x: 0, y: 17, w: 1, h: 2, targetMap: 'room_medicine', targetX: 448, targetY: 208 },
                 { x: 5, y: 19, w: 2, h: 1, targetMap: 'room_main', targetX: 368, targetY: 64 }
             ]
         }
@@ -240,7 +241,7 @@ export const Maps = {
             doors: [
                 { x: 0, y: 7, w: 1, h: 2, targetMap: 'room_corridor', targetX: 240, targetY: 272 },
                 // Hidden door (Initially inaccessible, handled by logic)
-                { x: 17, y: 7, w: 1, h: 2, targetMap: 'room_secret', targetX: 64, targetY: 200, hidden: true } 
+                { x: 17, y: 7, w: 1, h: 2, targetMap: 'room_secret', targetX: 64, targetY: 200, hidden: true }
             ]
         }
     },
@@ -272,7 +273,127 @@ export const Maps = {
             ],
             doors: [
                     { x: 0, y: 6, w: 1, h: 2, targetMap: 'room_bedroom_parents', targetX: 450, targetY: 400 }
-                ]
+            ]
+        }
+    },
+    room_study: {
+        id: 'room_study',
+        name: '旧书房',
+        width: 16,
+        height: 12,
+        data: [
+            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+        ],
+        objects: {
+            playerStart: { x: 448, y: 208 },
+            desk: { x: 180, y: 120, id: 'study_desk', dialog: '父亲的旧书桌。抽屉锁已经锈死，桌面却被擦得很干净，像是有人每天都在这里批改一份永远写不完的试卷。' },
+            interactables: [
+                {
+                    id: 'father_note',
+                    x: 180,
+                    y: 170,
+                    texture: 'trash_paper',
+                    tint: 0xffdd88,
+                    clueId: 'father_note',
+                    clueType: 'control',
+                    documentTitle: '父亲笔记',
+                    documentText: '明儿最近又顶嘴。孩子不能惯，一惯就会走歪路。我要把他的时间安排好，几点起床，几点做题，几点睡觉。只要照我说的做，他就不会像我一样没出息。'
+                },
+                {
+                    id: 'award_stack',
+                    x: 330,
+                    y: 120,
+                    texture: 'photo_frame',
+                    tint: 0xddddaa,
+                    clueId: 'award_stack',
+                    clueType: 'control',
+                    documentTitle: '奖状夹',
+                    documentText: '一沓奖状被压在玻璃板下，每张都被父亲用红笔圈出名次。第二名那张旁边写着：差一名就是没用。'
+                },
+                {
+                    id: 'school_memory_trigger',
+                    x: 330,
+                    y: 290,
+                    texture: 'desk',
+                    tint: 0x777777,
+                    dialog: '桌下塞着一个旧书包。拉链拉开的瞬间，粉笔灰的味道涌了出来。',
+                    memoryTrigger: { mapId: 'memory_school', x: 240, y: 320 }
+                }
+            ],
+            doors: [
+                { x: 15, y: 6, w: 1, h: 2, targetMap: 'room_corridor', targetX: 80, targetY: 464 }
+            ]
+        }
+    },
+    room_medicine: {
+        id: 'room_medicine',
+        name: '药柜小间',
+        width: 16,
+        height: 12,
+        data: [
+            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+        ],
+        objects: {
+            playerStart: { x: 448, y: 208 },
+            cabinet: { x: 150, y: 120, id: 'medicine_cabinet', dialog: '药柜里空了一大半，只剩几只没有标签的棕色药瓶。瓶口有苦味，像母亲常年含在舌根下的话。' },
+            interactables: [
+                {
+                    id: 'prescription_note',
+                    x: 250,
+                    y: 150,
+                    texture: 'trash_paper',
+                    tint: 0x99ddff,
+                    clueId: 'prescription_note',
+                    clueType: 'illness',
+                    documentTitle: '处方单',
+                    documentText: '处方上写着王秀兰需要规律服药和复诊，下面却有一行被父亲按破纸背的字：吃这些就能好？她是被脏东西缠上了。'
+                },
+                {
+                    id: 'unpaid_bill',
+                    x: 330,
+                    y: 250,
+                    texture: 'trash_paper',
+                    tint: 0xffffff,
+                    clueId: 'unpaid_bill',
+                    clueType: 'illness',
+                    documentTitle: '缴费单',
+                    documentText: '缴费单被撕成两半，金额不大，却一直没有交。背面写着：家丑不可外扬。'
+                },
+                {
+                    id: 'hospital_memory_trigger',
+                    x: 150,
+                    y: 300,
+                    texture: 'cabinet',
+                    tint: 0x8899aa,
+                    dialog: '药柜最底层压着一张医院排号单。号码牌翻过来，灯光突然变成惨白。',
+                    memoryTrigger: { mapId: 'memory_hospital', x: 80, y: 240 }
+                }
+            ],
+            doors: [
+                { x: 15, y: 6, w: 1, h: 2, targetMap: 'room_corridor', targetX: 80, targetY: 560 }
+            ]
         }
     },
     room_bedroom_me: {
@@ -337,7 +458,7 @@ export const Maps = {
         ],
         objects: {
             playerStart: { x: 320, y: 100 },
-            well: { x: 320, y: 320, dialog: '古老的枯井，井口被几块大石头死死压住，缝隙里塞满了画着符咒的黄纸。井底深处，似乎有冷风不断吹上来。小时候，我不小心把球踢到了井边，父亲发了疯一样打我，说井里住着吃人的怪物。' }, 
+            well: { x: 320, y: 320, dialog: '古老的枯井，井口被几块大石头死死压住，缝隙里塞满了画着符咒的黄纸。井底深处，似乎有冷风不断吹上来。小时候，我不小心把球踢到了井边，父亲发了疯一样打我，说井里住着吃人的怪物。' },
             incense: { x: 550, y: 550, dialog: '在树后发现了一把香。' },
             trees: [
                 { x: 100, y: 200 },
@@ -369,8 +490,8 @@ export const Maps = {
             [1,1,1,1,1,1,1,0,1,0,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1],
             [1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1],
             [1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,0,1],
-            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], 
-            [1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0], 
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0],
             [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1],
             [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
@@ -433,6 +554,215 @@ export const Maps = {
             doors: [
                 { x: 9, y: 13, w: 2, h: 1, targetMap: 'room_corridor', targetX: 176, targetY: 64 }
             ]
+        }
+    },
+    memory_school: {
+        id: 'memory_school',
+        name: '记忆：夜校',
+        visual: {
+            ambient: 0x4a3a2a,
+            floorTint: 0x6b5a35,
+            wallTint: 0x242015,
+            paperTint: 0xffe0aa
+        },
+        width: 18,
+        height: 14,
+        data: [
+            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1],
+        ],
+        objects: {
+            playerStart: { x: 240, y: 320 },
+            interactables: [
+                {
+                    id: 'school_blackboard',
+                    x: 288,
+                    y: 60,
+                    texture: 'photo_frame',
+                    tint: 0x0d1f18,
+                    clueId: 'school_blackboard',
+                    clueType: 'control',
+                    documentTitle: '黑板评语',
+                    documentText: '黑板上写着：李明，第二名。全班都在笑，只有父亲站在门口，脸比黑板还沉。'
+                },
+                {
+                    id: 'school_report',
+                    x: 160,
+                    y: 210,
+                    texture: 'trash_paper',
+                    tint: 0xffeeee,
+                    clueId: 'school_report',
+                    clueType: 'control',
+                    documentTitle: '成绩单',
+                    documentText: '总分只差三分。红笔在“三分”下面划了很多遍，最后纸被划破了。'
+                },
+                {
+                    id: 'school_final_stack',
+                    x: 400,
+                    y: 310,
+                    texture: 'desk',
+                    tint: 0x666666,
+                    dialog: '几张试卷按年份排好，最后一张背面写着：我不想回家。',
+                    clueId: 'school_last_argument',
+                    clueType: 'control',
+                    memoryComplete: 'school',
+                    memoryReturn: { mapId: 'room_study', x: 330, y: 290 }
+                }
+            ],
+            doors: []
+        }
+    },
+    memory_hospital: {
+        id: 'memory_hospital',
+        name: '记忆：旧医院',
+        visual: {
+            ambient: 0x9fb8c8,
+            floorTint: 0x9fb3b8,
+            wallTint: 0x52636b,
+            paperTint: 0xdff7ff
+        },
+        width: 20,
+        height: 14,
+        data: [
+            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1],
+        ],
+        objects: {
+            playerStart: { x: 80, y: 240 },
+            interactables: [
+                {
+                    id: 'hospital_window',
+                    x: 260,
+                    y: 90,
+                    texture: 'photo_frame',
+                    tint: 0x99ccff,
+                    clueId: 'hospital_window',
+                    clueType: 'illness',
+                    documentTitle: '诊室窗口',
+                    documentText: '窗口里没有医生，只有母亲的声音反复说：我吃了药就不会看见他了，对吗？'
+                },
+                {
+                    id: 'hospital_ward',
+                    x: 480,
+                    y: 180,
+                    texture: 'bed',
+                    tint: 0xaaccff,
+                    clueId: 'hospital_ward',
+                    clueType: 'illness',
+                    documentTitle: '病房门牌',
+                    documentText: '门牌上写着王秀兰，旁边被父亲划掉了“住院观察”四个字。'
+                },
+                {
+                    id: 'hospital_return',
+                    x: 420,
+                    y: 360,
+                    texture: 'trash_paper',
+                    tint: 0xffffff,
+                    dialog: '缴费单在灯下慢慢变湿，像有人刚刚哭过。你听见母亲说：明儿，不要怪我。',
+                    clueId: 'hospital_mother_voice',
+                    clueType: 'illness',
+                    memoryComplete: 'hospital',
+                    memoryReturn: { mapId: 'room_medicine', x: 150, y: 300 }
+                }
+            ],
+            doors: []
+        }
+    },
+    memory_crash: {
+        id: 'memory_crash',
+        name: '记忆：雨夜车祸',
+        visual: {
+            ambient: 0x26384a,
+            floorTint: 0x2b3038,
+            wallTint: 0x111a22,
+            paperTint: 0x9db5c8,
+            debris: false
+        },
+        width: 30,
+        height: 12,
+        data: [
+            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+        ],
+        objects: {
+            playerStart: { x: 120, y: 200 },
+            interactables: [
+                {
+                    id: 'crash_car_memory',
+                    x: 420,
+                    y: 230,
+                    texture: 'car',
+                    tint: 0x666666,
+                    clueId: 'crash_car_memory',
+                    clueType: 'death',
+                    documentTitle: '变形的车门',
+                    documentText: '车门从里面撞弯了。安全带还扣着，像一只不肯松开的手。你终于想起来，自己并不是从这里走出去的。'
+                },
+                {
+                    id: 'crash_guardrail',
+                    x: 660,
+                    y: 160,
+                    texture: 'photo_frame',
+                    tint: 0xcccccc,
+                    clueId: 'crash_guardrail',
+                    clueType: 'death',
+                    documentTitle: '护栏缺口',
+                    documentText: '护栏外的坡下有一只纸飞机，湿透了，却还保持着飞出去的姿势。'
+                },
+                {
+                    id: 'final_leave',
+                    x: 850,
+                    y: 180,
+                    texture: 'tile_mud',
+                    tint: 0x88ccff,
+                    dialog: '前面的路没有灯，也没有人叫你的名字。只是雨小了一点。',
+                    endingChoice: 'leave'
+                },
+                {
+                    id: 'final_return',
+                    x: 850,
+                    y: 320,
+                    texture: 'tile_wall',
+                    tint: 0x884444,
+                    dialog: '身后的老宅亮起一盏灯，母亲在门里喊你吃饭。父亲没有骂人，只是沉默地等着。',
+                    endingChoice: 'return'
+                }
+            ],
+            doors: []
         }
     },
     room_memory: {

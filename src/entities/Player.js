@@ -3,19 +3,21 @@ export class Player {
         this.scene = scene;
         this.sprite = scene.physics.add.sprite(x, y, 'player_sheet', 0);
         this.sprite.setCollideWorldBounds(true);
-        this.sprite.setPipeline('Light2D');
-        
+        if (scene.lights && scene.lights.active) {
+            this.sprite.setPipeline('Light2D');
+        }
+
         // Make collision body smaller for easier movement through doors
         this.sprite.body.setSize(20, 20);
         this.sprite.body.setOffset(6, 12);
-        
+
         this.initAnims();
         this.initFlashlight();
-        
+
         this.speed = 150;
         this.runSpeed = 250;
         this.lastStepTime = 0;
-        
+
         // Stamina System
         this.maxStamina = 100;
         this.stamina = 100;
@@ -80,8 +82,12 @@ export class Player {
         this.flashlight.setAlpha(0.6);
         this.flashlight.setBlendMode(Phaser.BlendModes.ADD);
         this.flashlight.setDepth(99);
-        
-        this.lightSource = this.scene.lights.addLight(this.sprite.x, this.sprite.y, 140).setIntensity(1.2);
+
+        if (this.scene.lights && this.scene.lights.active) {
+            this.lightSource = this.scene.lights.addLight(this.sprite.x, this.sprite.y, 140).setIntensity(1.2);
+        } else {
+            this.lightSource = null;
+        }
         this.flickerTimer = 0;
     }
 
@@ -119,11 +125,11 @@ export class Player {
         this.flickerTimer++;
         // Use a threshold that doesn't change every frame to avoid weird probability distributions
         if (!this.nextFlickerTime) this.nextFlickerTime = 300 + Math.random() * 300;
-        
+
         if (this.flickerTimer > this.nextFlickerTime) {
             this.flickerTimer = 0;
             this.nextFlickerTime = 300 + Math.random() * 300;
-            
+
             // Flicker Image
             this.scene.tweens.add({
                 targets: this.flashlight,
@@ -166,16 +172,16 @@ export class Player {
                 moveX /= len;
                 moveY /= len;
             }
-            
+
             const currentSpeed = this.isRunning ? this.runSpeed : this.speed;
             this.sprite.setVelocityX(moveX * currentSpeed);
             this.sprite.setVelocityY(moveY * currentSpeed);
-            
+
             // Sound
             const now = this.scene.time.now;
             // Faster steps when running
             const stepInterval = this.isRunning ? 250 : 400;
-            
+
             if (now - this.lastStepTime > stepInterval && soundManager) {
                 if (soundManager.playFootstep) {
                     soundManager.playFootstep();
@@ -184,10 +190,10 @@ export class Player {
                 }
                 this.lastStepTime = now;
             }
-            
+
             // Anims
             const animSpeed = this.isRunning ? 20 : 10; // Faster anims
-            // Update anim speed if already playing? 
+            // Update anim speed if already playing?
             // Phaser anims speed is set at creation. We might need to adjust timeScale or just accept it.
             // Simple way: check current anim and set timeScale
             if (this.sprite.anims.currentAnim) {
@@ -209,7 +215,7 @@ export class Player {
             // Using Phaser.Math.Angle.RotateTo is good, but let's make it slower for inertia effect
             const lerpFactor = 0.08; // Lower = more lag/weight
             this.flashlight.rotation = Phaser.Math.Angle.RotateTo(this.flashlight.rotation, targetAngle, lerpFactor);
-            
+
             // Walking Sway Effect (Tween)
             if (!this.swayTween) {
                 this.swayTween = this.scene.tweens.add({
@@ -230,7 +236,7 @@ export class Player {
 
         } else {
             this.sprite.anims.stop();
-            
+
             // Stop Sway
             if (this.swayTween && this.swayTween.isPlaying()) {
                 this.swayTween.stop();
@@ -244,7 +250,9 @@ export class Player {
         // Sync Light Position
         this.flashlight.x = this.sprite.x;
         this.flashlight.y = this.sprite.y;
-        this.lightSource.x = this.sprite.x;
-        this.lightSource.y = this.sprite.y;
+        if (this.lightSource) {
+            this.lightSource.x = this.sprite.x;
+            this.lightSource.y = this.sprite.y;
+        }
     }
 }
